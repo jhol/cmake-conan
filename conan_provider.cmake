@@ -137,43 +137,43 @@ endfunction()
 
 
 macro(detect_gnu_libstdcxx)
-    # _CONAN_IS_GNU_LIBSTDCXX true if GNU libstdc++
+    # _conan_is_gnu_libstdcxx true if GNU libstdc++
     check_cxx_source_compiles("
     #include <cstddef>
     #if !defined(__GLIBCXX__) && !defined(__GLIBCPP__)
     static_assert(false);
     #endif
-    int main(){}" _CONAN_IS_GNU_LIBSTDCXX)
+    int main(){}" _conan_is_gnu_libstdcxx)
 
-    # _CONAN_GNU_LIBSTDCXX_IS_CXX11_ABI true if C++11 ABI
+    # _conan_gnu_libstdcxx_is_cxx11_abi true if C++11 ABI
     check_cxx_source_compiles("
     #include <string>
     static_assert(sizeof(std::string) != sizeof(void*), \"using libstdc++\");
-    int main () {}" _CONAN_GNU_LIBSTDCXX_IS_CXX11_ABI)
+    int main () {}" _conan_gnu_libstdcxx_is_cxx11_abi)
 
-    set(_CONAN_GNU_LIBSTDCXX_SUFFIX "")
-    if(_CONAN_GNU_LIBSTDCXX_IS_CXX11_ABI)
-        set(_CONAN_GNU_LIBSTDCXX_SUFFIX "11")
+    set(_conan_gnu_libstdcxx_suffix "")
+    if(_conan_gnu_libstdcxx_is_cxx11_abi)
+        set(_conan_gnu_libstdcxx_suffix "11")
     endif()
-    unset (_CONAN_GNU_LIBSTDCXX_IS_CXX11_ABI)
+    unset (_conan_gnu_libstdcxx_is_cxx11_abi)
 endmacro()
 
 
 macro(detect_libcxx)
-    # _CONAN_IS_LIBCXX true if LLVM libc++
+    # _conan_is_libcxx true if LLVM libc++
     check_cxx_source_compiles("
     #include <cstddef>
     #if !defined(_LIBCPP_VERSION)
        static_assert(false);
     #endif
-    int main(){}" _CONAN_IS_LIBCXX)
+    int main(){}" _conan_is_libcxx)
 endmacro()
 
 
-function(detect_lib_cxx LIB_CXX)
+function(detect_lib_cxx lib_cxx)
     if(CMAKE_SYSTEM_NAME STREQUAL "Android")
         message(STATUS "CMake-Conan: android_stl=${CMAKE_ANDROID_STL_TYPE}")
-        set(${LIB_CXX} ${CMAKE_ANDROID_STL_TYPE} PARENT_SCOPE)
+        set(${lib_cxx} ${CMAKE_ANDROID_STL_TYPE} PARENT_SCOPE)
         return()
     endif()
 
@@ -181,21 +181,21 @@ function(detect_lib_cxx LIB_CXX)
 
     if(CMAKE_CXX_COMPILER_ID MATCHES "GNU")
         detect_gnu_libstdcxx()
-        set(${LIB_CXX} "libstdc++${_CONAN_GNU_LIBSTDCXX_SUFFIX}" PARENT_SCOPE)
+        set(${lib_cxx} "libstdc++${_conan_gnu_libstdcxx_suffix}" PARENT_SCOPE)
     elseif(CMAKE_CXX_COMPILER_ID MATCHES "AppleClang")
-        set(${LIB_CXX} "libc++" PARENT_SCOPE)
+        set(${lib_cxx} "libc++" PARENT_SCOPE)
     elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang" AND NOT CMAKE_SYSTEM_NAME MATCHES "Windows")
         # Check for libc++
         detect_libcxx()
-        if(_CONAN_IS_LIBCXX)
-            set(${LIB_CXX} "libc++" PARENT_SCOPE)
+        if(_conan_is_libcxx)
+            set(${lib_cxx} "libc++" PARENT_SCOPE)
             return()
         endif()
 
         # Check for libstdc++
         detect_gnu_libstdcxx()
-        if(_CONAN_IS_GNU_LIBSTDCXX)
-            set(${LIB_CXX} "libstdc++${_CONAN_GNU_LIBSTDCXX_SUFFIX}" PARENT_SCOPE)
+        if(_conan_is_gnu_libstdcxx)
+            set(${lib_cxx} "libstdc++${_conan_gnu_libstdcxx_suffix}" PARENT_SCOPE)
             return()
         endif()
 
