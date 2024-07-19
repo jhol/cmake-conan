@@ -35,6 +35,7 @@ set(CONAN_MINIMUM_VERSION 2.0.5)
 cmake_policy(PUSH)
 cmake_minimum_required(VERSION 3.24)
 
+
 function(detect_os OS OS_API_LEVEL OS_SDK OS_SUBSYSTEM OS_VERSION)
     # it could be cross compilation
     message(STATUS "CMake-Conan: cmake_system_name=${CMAKE_SYSTEM_NAME}")
@@ -303,6 +304,7 @@ function(detect_build_type BUILD_TYPE)
         set(${BUILD_TYPE} ${CMAKE_BUILD_TYPE} PARENT_SCOPE)
     endif()
 endfunction()
+
 
 macro(set_conan_compiler_if_appleclang lang command output_variable)
     if(CMAKE_${lang}_COMPILER_ID STREQUAL "AppleClang")
