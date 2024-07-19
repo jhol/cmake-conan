@@ -94,7 +94,7 @@ function(detect_os os os_api_level os_sdk os_subsystem os_version)
 endfunction()
 
 
-function(detect_arch ARCH)
+function(detect_arch arch)
     # CMAKE_OSX_ARCHITECTURES can contain multiple architectures, but Conan only supports one.
     # Therefore this code only finds one. If the recipes support multiple architectures, the
     # build will work. Otherwise, there will be a linker error for the missing architecture(s).
@@ -113,18 +113,18 @@ function(detect_arch ARCH)
         set(host_arch ${CMAKE_SYSTEM_PROCESSOR})
     endif()
     if(host_arch MATCHES "aarch64|arm64|ARM64")
-        set(_ARCH armv8)
+        set(_arch armv8)
     elseif(host_arch MATCHES "armv7|armv7-a|armv7l|ARMV7")
-        set(_ARCH armv7)
+        set(_arch armv7)
     elseif(host_arch MATCHES armv7s)
-        set(_ARCH armv7s)
+        set(_arch armv7s)
     elseif(host_arch MATCHES "i686|i386|X86")
-        set(_ARCH x86)
+        set(_arch x86)
     elseif(host_arch MATCHES "AMD64|amd64|x86_64|x64")
-        set(_ARCH x86_64)
+        set(_arch x86_64)
     endif()
-    message(STATUS "CMake-Conan: cmake_system_processor=${_ARCH}")
-    set(${ARCH} ${_ARCH} PARENT_SCOPE)
+    message(STATUS "CMake-Conan: cmake_system_processor=${_arch}")
+    set(${arch} ${_arch} PARENT_SCOPE)
 endfunction()
 
 
