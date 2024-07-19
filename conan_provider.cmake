@@ -296,12 +296,12 @@ function(detect_compiler compiler compiler_version compiler_runtime compiler_run
 endfunction()
 
 
-function(detect_build_type BUILD_TYPE)
-    get_property(_MULTICONFIG_GENERATOR GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
-    if(NOT _MULTICONFIG_GENERATOR)
+function(detect_build_type build_type)
+    get_property(multiconfig_generator GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
+    if(NOT multiconfig_generator)
         # Only set when we know we are in a single-configuration generator
         # Note: we may want to fail early if `CMAKE_BUILD_TYPE` is not defined
-        set(${BUILD_TYPE} ${CMAKE_BUILD_TYPE} PARENT_SCOPE)
+        set(${build_type} ${CMAKE_BUILD_TYPE} PARENT_SCOPE)
     endif()
 endfunction()
 
