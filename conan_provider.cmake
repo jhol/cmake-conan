@@ -519,20 +519,20 @@ endfunction()
 
 function(conan_version_check)
     set(options )
-    set(oneValueArgs MINIMUM CURRENT)
-    set(multiValueArgs )
-    cmake_parse_arguments(CONAN_VERSION_CHECK
-        "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+    set(one_value_args MINIMUM CURRENT)
+    set(multi_value_args )
+    cmake_parse_arguments(conan_version_check
+        "${options}" "${one_value_args}" "${multi_value_args}" ${ARGN})
 
-    if(NOT CONAN_VERSION_CHECK_MINIMUM)
+    if(NOT conan_version_check_MINIMUM)
         message(FATAL_ERROR "CMake-Conan: Required parameter MINIMUM not set!")
     endif()
-        if(NOT CONAN_VERSION_CHECK_CURRENT)
+        if(NOT conan_version_check_CURRENT)
         message(FATAL_ERROR "CMake-Conan: Required parameter CURRENT not set!")
     endif()
 
-    if(CONAN_VERSION_CHECK_CURRENT VERSION_LESS CONAN_VERSION_CHECK_MINIMUM)
-        message(FATAL_ERROR "CMake-Conan: Conan version must be ${CONAN_VERSION_CHECK_MINIMUM} or later")
+    if(conan_version_check_CURRENT VERSION_LESS conan_version_check_MINIMUM)
+        message(FATAL_ERROR "CMake-Conan: Conan version must be ${conan_version_check_MINIMUM} or later")
     endif()
 endfunction()
 
